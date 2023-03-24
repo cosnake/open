@@ -1,7 +1,48 @@
-echo "# open" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/cosnake/open.git
-git push -u origin main
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const NetworkCode = () => {
+  const [inputValues, setInputValues] = useState({
+    input1: '',
+    input2: '',
+    input3: '',
+    input4: '',
+    input5: '',
+    input6: '',
+    input7: '',
+  });
+  const [result, setResult] = useState('');
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setInputValues({ ...inputValues, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.post('/api/qsl', inputValues);
+      setResult(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
+        <input type="number" name="input1" value={inputValues.input1} onChange={handleInputChange} />
+        <input type="number" name="input2" value={inputValues.input2} onChange={handleInputChange} />
+        <input type="number" name="input3" value={inputValues.input3} onChange={handleInputChange} />
+        <input type="number" name="input4" value={inputValues.input4} onChange={handleInputChange} />
+        <input type="number" name="input5" value={inputValues.input5} onChange={handleInputChange} />
+        <input type="number" name="input6" value={inputValues.input6} onChange={handleInputChange} />
+        <input type="number" name="input7" value={inputValues.input7} onChange={handleInputChange} />
+        <button type="submit">Submit</button>
+      </form>
+      <div>{result}</div>
+    </div>
+  );
+};
+
+export default NetworkCode;
